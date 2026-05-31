@@ -2,7 +2,6 @@ package vista;
 
 import java.util.ArrayList;
 import modelo.ContenidoAudiovisual;
-import repositorio.ArchivoContenidoRepositorio;
 import repositorio.ContenidoRepositorio;
 import java.util.Scanner;
 import controlador.ContenidoControlador;
@@ -29,10 +28,10 @@ public class VistaConsola {
     private static final int OPCION_GUARDAR_CSV = 8;
     private static final int OPCION_SALIR = 9;     
     
-    public VistaConsola(ContenidoControlador controlador) {
+    public VistaConsola(ContenidoControlador controlador, ContenidoRepositorio repositorio) {
         this.scanner = new Scanner(System.in);
         this.controlador = controlador;
-        this.repositorio = new ArchivoContenidoRepositorio();
+        this.repositorio = repositorio;
     }
 
     public void iniciar() {
