@@ -18,13 +18,15 @@ import modelo.TransmisionEnVivo;
 
 
 public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
-
+	
+	//RUTA BASE DE LOS ARCHIVOS CSV
 	private static final String RUTA_BASE = "datos/";
     private static final String ARCHIVO_CONTENIDOS = RUTA_BASE + "contenidos.csv";
     private static final String ARCHIVO_ACTORES = RUTA_BASE + "actores.csv";
     private static final String ARCHIVO_TEMPORADAS = RUTA_BASE + "temporadas.csv";
     private static final String ARCHIVO_INVESTIGADORES = RUTA_BASE + "investigadores.csv";
 
+    //CARGA CONTENIDOS Y RELACIONES DESDE LOS ARCHIVOS CSV
     @Override
     public ArrayList<ContenidoAudiovisual> cargar() {
         ArrayList<ContenidoAudiovisual> contenidos = cargarContenidosPrincipales();
@@ -34,7 +36,8 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         cargarInvestigadores(contenidos);
         return contenidos;
     }
-
+    
+    //GUARDA CONTENIDOS Y RELACIONES EN LOS ARCHIVOS CSV
     @Override
     public void guardar(ArrayList<ContenidoAudiovisual> contenidos) {
         guardarContenidosPrincipales(contenidos);
@@ -72,7 +75,8 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
 
         return contenidos;
     }
-
+    
+    //CONVIERTE UNA LINEA CSV EN UN OBJETO DEL MODELO
     private ContenidoAudiovisual convertirLineaAContenido(String linea) {
         String[] datos = linea.split(",", -1);
 
@@ -108,7 +112,6 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         int duracion = Integer.parseInt(datos[2].trim());
         String genero = datos[3].trim();
         String estudio = datos[4].trim();
-
         return new Pelicula(titulo, duracion, genero, estudio);
     }
 
@@ -117,7 +120,6 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         int duracion = Integer.parseInt(datos[2].trim());
         String genero = datos[3].trim();
         int temporadas = Integer.parseInt(datos[4].trim());
-
         return new SerieDeTV(titulo, duracion, genero, temporadas);
     }
 
@@ -126,7 +128,6 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         int duracion = Integer.parseInt(datos[2].trim());
         String genero = datos[3].trim();
         String tema = datos[4].trim();
-
         return new Documental(titulo, duracion, genero, tema);
     }
 
@@ -137,7 +138,6 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         String plataforma = datos[4].trim();
         String calidad = datos[5].trim();
         boolean disponibilidadOffline = Boolean.parseBoolean(datos[6].trim());
-
         return new PeliculaStreaming(
                 titulo,
                 duracion,
@@ -155,7 +155,6 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         String plataforma = datos[4].trim();
         String creador = datos[5].trim();
         int espectadores = Integer.parseInt(datos[6].trim());
-
         return new TransmisionEnVivo(
                 titulo,
                 duracion,
@@ -445,10 +444,11 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         }
     }
     
+    //CREA UN LECTOR PARA LOS ARCHIVOS CSV
     private BufferedReader crearLector(String rutaArchivo) throws IOException {
         return new BufferedReader(new FileReader(rutaArchivo));
     }
-
+   //CREA UN ESCRITOR PARA LOS ARCHIVOS CSV
     private BufferedWriter crearEscritor(String rutaArchivo) throws IOException {
         return new BufferedWriter(new FileWriter(rutaArchivo));
     }

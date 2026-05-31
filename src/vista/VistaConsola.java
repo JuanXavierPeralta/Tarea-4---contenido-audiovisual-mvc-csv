@@ -18,6 +18,8 @@ public class VistaConsola {
     private Scanner scanner;
     private ContenidoControlador controlador;
     private ContenidoRepositorio repositorio;
+    
+    //OPCIONES DEL MENU PRINCIPAL
     private static final int OPCION_AGREGAR_PELICULA = 1;
     private static final int OPCION_AGREGAR_SERIE = 2;
     private static final int OPCION_AGREGAR_DOCUMENTAL = 3;
@@ -34,6 +36,7 @@ public class VistaConsola {
         this.repositorio = repositorio;
     }
 
+    //INICIA EL CICLO PRINCIPAL DEL MENU
     public void iniciar() {
         int opcion;
 
@@ -44,6 +47,7 @@ public class VistaConsola {
         } while (opcion != OPCION_SALIR);
     }
 
+    //MENU PARA USUARIO
     private void mostrarMenu() {
         System.out.println("==================================");
         System.out.println(" SISTEMA DE CONTENIDO AUDIOVISUAL ");
@@ -60,6 +64,7 @@ public class VistaConsola {
         System.out.println("==================================");
     }
 
+    //PROCESA LA OPCION SELECCIONADA POR EL USUARIO
     private void procesarOpcion(int opcion) {
         switch (opcion) {
         case OPCION_AGREGAR_PELICULA:
