@@ -19,7 +19,16 @@ public class VistaConsola {
     private Scanner scanner;
     private ContenidoControlador controlador;
     private ContenidoRepositorio repositorio;
-
+    private static final int OPCION_AGREGAR_PELICULA = 1;
+    private static final int OPCION_AGREGAR_SERIE = 2;
+    private static final int OPCION_AGREGAR_DOCUMENTAL = 3;
+    private static final int OPCION_AGREGAR_PELICULA_STREAMING = 4;
+    private static final int OPCION_AGREGAR_TRANSMISION = 5;
+    private static final int OPCION_MOSTRAR_CONTENIDOS = 6;
+    private static final int OPCION_CARGAR_CSV = 7;
+    private static final int OPCION_GUARDAR_CSV = 8;
+    private static final int OPCION_SALIR = 9;     
+    
     public VistaConsola(ContenidoControlador controlador) {
         this.scanner = new Scanner(System.in);
         this.controlador = controlador;
@@ -33,7 +42,7 @@ public class VistaConsola {
             mostrarMenu();
             opcion = leerEntero("Seleccione una opción: ");
             procesarOpcion(opcion);
-        } while (opcion != 9);
+        } while (opcion != OPCION_SALIR);
     }
 
     private void mostrarMenu() {
@@ -54,35 +63,35 @@ public class VistaConsola {
 
     private void procesarOpcion(int opcion) {
         switch (opcion) {
-            case 1:
-                agregarPelicula();
-                break;
-            case 2:
-                agregarSerie();
-                break;
-            case 3:
-                agregarDocumental();
-                break;
-            case 4:
-                agregarPeliculaStreaming();
-                break;
-            case 5:
-                agregarTransmisionEnVivo();
-                break;
-            case 6:
-                mostrarContenidos();
-                break;
-            case 7:
-            	cargarContenidosDesdeCsv();
-                break;
-            case 8:
-            	guardarContenidosEnCsv();
-                break;
-            case 9:
-                System.out.println("Saliendo del sistema...");
-                break;
-            default:
-                System.out.println("Opción no válida.");
+        case OPCION_AGREGAR_PELICULA:
+            agregarPelicula();
+            break;
+        case OPCION_AGREGAR_SERIE:
+            agregarSerie();
+            break;
+        case OPCION_AGREGAR_DOCUMENTAL:
+            agregarDocumental();
+            break;
+        case OPCION_AGREGAR_PELICULA_STREAMING:
+            agregarPeliculaStreaming();
+            break;
+        case OPCION_AGREGAR_TRANSMISION:
+            agregarTransmisionEnVivo();
+            break;
+        case OPCION_MOSTRAR_CONTENIDOS:
+            mostrarContenidos();
+            break;
+        case OPCION_CARGAR_CSV:
+            cargarContenidosDesdeCsv();
+            break;
+        case OPCION_GUARDAR_CSV:
+            guardarContenidosEnCsv();
+            break;
+        case OPCION_SALIR:
+            System.out.println("Saliendo del sistema...");
+            break;
+        default:
+            System.out.println("Opción no válida.");
         }
     }
 

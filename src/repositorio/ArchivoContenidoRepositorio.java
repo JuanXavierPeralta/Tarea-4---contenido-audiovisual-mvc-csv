@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import modelo.Actor;
 import modelo.ContenidoAudiovisual;
 import modelo.Documental;
@@ -21,7 +20,6 @@ import modelo.TransmisionEnVivo;
 public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
 
 	private static final String RUTA_BASE = "datos/";
-
     private static final String ARCHIVO_CONTENIDOS = RUTA_BASE + "contenidos.csv";
     private static final String ARCHIVO_ACTORES = RUTA_BASE + "actores.csv";
     private static final String ARCHIVO_TEMPORADAS = RUTA_BASE + "temporadas.csv";
@@ -34,7 +32,6 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         cargarActores(contenidos);
         cargarTemporadas(contenidos);
         cargarInvestigadores(contenidos);
-
         return contenidos;
     }
 
@@ -44,14 +41,13 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         guardarActores(contenidos);
         guardarTemporadas(contenidos);
         guardarInvestigadores(contenidos);
-
         System.out.println("Datos guardados correctamente en archivos CSV.");
     }
 
     private ArrayList<ContenidoAudiovisual> cargarContenidosPrincipales() {
         ArrayList<ContenidoAudiovisual> contenidos = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_CONTENIDOS))) {
+        try (BufferedReader reader = crearLector(ARCHIVO_CONTENIDOS)) {
             String linea;
             boolean primeraLinea = true;
 
@@ -85,39 +81,93 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         }
 
         String tipo = datos[0].trim();
-        String titulo = datos[1].trim();
-        int duracion = Integer.parseInt(datos[2].trim());
-        String genero = datos[3].trim();
-        String dato1 = datos[4].trim();
-        String dato2 = datos[5].trim();
-        String dato3 = datos[6].trim();
 
         switch (tipo) {
             case "Pelicula":
-                return new Pelicula(titulo, duracion, genero, dato1);
+                return crearPelicula(datos);
 
             case "SerieDeTV":
-                int temporadas = Integer.parseInt(dato1);
-                return new SerieDeTV(titulo, duracion, genero, temporadas);
+                return crearSerie(datos);
 
             case "Documental":
-                return new Documental(titulo, duracion, genero, dato1);
+                return crearDocumental(datos);
 
             case "PeliculaStreaming":
-                boolean disponibilidadOffline = Boolean.parseBoolean(dato3);
-                return new PeliculaStreaming(titulo, duracion, genero, dato1, dato2, disponibilidadOffline);
+                return crearPeliculaStreaming(datos);
 
             case "TransmisionEnVivo":
-                int espectadores = Integer.parseInt(dato3);
-                return new TransmisionEnVivo(titulo, duracion, genero, dato1, dato2, espectadores);
+                return crearTransmisionEnVivo(datos);
 
             default:
                 return null;
         }
     }
+    
+    private Pelicula crearPelicula(String[] datos) {
+        String titulo = datos[1].trim();
+        int duracion = Integer.parseInt(datos[2].trim());
+        String genero = datos[3].trim();
+        String estudio = datos[4].trim();
+
+        return new Pelicula(titulo, duracion, genero, estudio);
+    }
+
+    private SerieDeTV crearSerie(String[] datos) {
+        String titulo = datos[1].trim();
+        int duracion = Integer.parseInt(datos[2].trim());
+        String genero = datos[3].trim();
+        int temporadas = Integer.parseInt(datos[4].trim());
+
+        return new SerieDeTV(titulo, duracion, genero, temporadas);
+    }
+
+    private Documental crearDocumental(String[] datos) {
+        String titulo = datos[1].trim();
+        int duracion = Integer.parseInt(datos[2].trim());
+        String genero = datos[3].trim();
+        String tema = datos[4].trim();
+
+        return new Documental(titulo, duracion, genero, tema);
+    }
+
+    private PeliculaStreaming crearPeliculaStreaming(String[] datos) {
+        String titulo = datos[1].trim();
+        int duracion = Integer.parseInt(datos[2].trim());
+        String genero = datos[3].trim();
+        String plataforma = datos[4].trim();
+        String calidad = datos[5].trim();
+        boolean disponibilidadOffline = Boolean.parseBoolean(datos[6].trim());
+
+        return new PeliculaStreaming(
+                titulo,
+                duracion,
+                genero,
+                plataforma,
+                calidad,
+                disponibilidadOffline
+        );
+    }
+
+    private TransmisionEnVivo crearTransmisionEnVivo(String[] datos) {
+        String titulo = datos[1].trim();
+        int duracion = Integer.parseInt(datos[2].trim());
+        String genero = datos[3].trim();
+        String plataforma = datos[4].trim();
+        String creador = datos[5].trim();
+        int espectadores = Integer.parseInt(datos[6].trim());
+
+        return new TransmisionEnVivo(
+                titulo,
+                duracion,
+                genero,
+                plataforma,
+                creador,
+                espectadores
+        );
+    }
 
     private void cargarActores(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_ACTORES))) {
+    	try (BufferedReader reader = crearLector(ARCHIVO_ACTORES)) {
             String linea;
             boolean primeraLinea = true;
 
@@ -153,7 +203,7 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
     }
 
     private void cargarTemporadas(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_TEMPORADAS))) {
+    	try (BufferedReader reader = crearLector(ARCHIVO_TEMPORADAS)) {
             String linea;
             boolean primeraLinea = true;
 
@@ -189,7 +239,7 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
     }
 
     private void cargarInvestigadores(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_INVESTIGADORES))) {
+    	try (BufferedReader reader = crearLector(ARCHIVO_INVESTIGADORES)) {
             String linea;
             boolean primeraLinea = true;
 
@@ -255,7 +305,7 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
     }
     
     private void guardarContenidosPrincipales(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_CONTENIDOS))) {
+    	try (BufferedWriter writer = crearEscritor(ARCHIVO_CONTENIDOS)) {
             writer.write("tipo,titulo,duracion,genero,dato1,dato2,dato3");
             writer.newLine();
 
@@ -324,7 +374,7 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
     
     
     private void guardarActores(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_ACTORES))) {
+    	try (BufferedWriter writer = crearEscritor(ARCHIVO_ACTORES)) {
             writer.write("tituloPelicula,nombre,edad,personaje");
             writer.newLine();
 
@@ -348,7 +398,7 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
     }
 
     private void guardarTemporadas(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_TEMPORADAS))) {
+    	try (BufferedWriter writer = crearEscritor(ARCHIVO_TEMPORADAS)) {
             writer.write("tituloSerie,numero,numeroEpisodios,fechaEstreno");
             writer.newLine();
 
@@ -372,7 +422,7 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
     }
 
     private void guardarInvestigadores(ArrayList<ContenidoAudiovisual> contenidos) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_INVESTIGADORES))) {
+    	try (BufferedWriter writer = crearEscritor(ARCHIVO_INVESTIGADORES)) {
             writer.write("tituloDocumental,nombre,area,universidad");
             writer.newLine();
 
@@ -393,5 +443,13 @@ public class ArchivoContenidoRepositorio implements ContenidoRepositorio {
         } catch (IOException e) {
             System.out.println("Error al guardar investigadores.csv: " + e.getMessage());
         }
+    }
+    
+    private BufferedReader crearLector(String rutaArchivo) throws IOException {
+        return new BufferedReader(new FileReader(rutaArchivo));
+    }
+
+    private BufferedWriter crearEscritor(String rutaArchivo) throws IOException {
+        return new BufferedWriter(new FileWriter(rutaArchivo));
     }
 }
